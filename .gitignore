@@ -1,0 +1,10 @@
+.godot/
+*.translation
+
+export_presets.cfg
+*.apk
+*.aab
+*.exe
+*.pck
+*.ipa
+*.zip

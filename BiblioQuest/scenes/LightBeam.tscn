@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dhq2tppcacmjq"]
+
+[ext_resource type="Script" path="res://scripts/LightBeam.gd" id="1_ihajm"]
+
+[node name="LightBeam" type="Node2D"]
+script = ExtResource("1_ihajm")
+opacity_loss_per_bounce = 0.25
+
+[node name="LineGlow" type="Line2D" parent="."]
+
+[node name="LineCore" type="Line2D" parent="."]
