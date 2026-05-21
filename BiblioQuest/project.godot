@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="BiblioQuest Game"
-run/main_scene="res://scenes/Level1.tscn"
+run/main_scene="res://scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 
 [input]

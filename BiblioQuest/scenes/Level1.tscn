@@ -1,11 +1,13 @@
-[gd_scene load_steps=13 format=3 uid="uid://bqum2ge8wy5mi"]
+[gd_scene load_steps=15 format=3 uid="uid://bqum2ge8wy5mi"]
 
 [ext_resource type="Texture2D" uid="uid://rfg5qcvhyim5" path="res://assets/wood_tile-removebg-preview.png" id="1_4lxkl"]
+[ext_resource type="Script" path="res://scripts/Level1.gd" id="1_bcd0m"]
 [ext_resource type="PackedScene" uid="uid://b4uajqk71jl4e" path="res://scenes/Door.tscn" id="2_b0ohr"]
 [ext_resource type="PackedScene" uid="uid://1jjtuhcdlmnb" path="res://scenes/Mirror.tscn" id="3_8m14h"]
 [ext_resource type="PackedScene" uid="uid://c7biaes8kq1sl" path="res://scenes/Bookshelf.tscn" id="4_vdisv"]
 [ext_resource type="PackedScene" uid="uid://da2yoqesbl43v" path="res://scenes/Player.tscn" id="5_ow6w0"]
 [ext_resource type="PackedScene" uid="uid://dhq2tppcacmjq" path="res://scenes/LightBeam.tscn" id="6_0vjmu"]
+[ext_resource type="PackedScene" uid="uid://b6wmjc5wss54p" path="res://scenes/ClockCollectible.tscn" id="8_1bgwl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_psjyf"]
 size = Vector2(1152, 20)
@@ -467,6 +469,7 @@ texture = ExtResource("1_4lxkl")
 sources/0 = SubResource("TileSetAtlasSource_vjwbb")
 
 [node name="Level1" type="Node2D"]
+script = ExtResource("1_bcd0m")
 
 [node name="WallTop" type="StaticBody2D" parent="."]
 collision_mask = 0
@@ -561,3 +564,30 @@ rotation = -0.785398
 [node name="Mirror8" parent="." instance=ExtResource("3_8m14h")]
 position = Vector2(66, 399)
 rotation = -0.785398
+
+[node name="LevelTimer" type="Timer" parent="."]
+wait_time = 60.0
+one_shot = true
+autostart = true
+
+[node name="ClockCollectible" parent="." instance=ExtResource("8_1bgwl")]
+position = Vector2(574, 264)
+
+[node name="ClockCollectible2" parent="." instance=ExtResource("8_1bgwl")]
+position = Vector2(560, 311)
+
+[node name="ClockCollectible3" parent="." instance=ExtResource("8_1bgwl")]
+position = Vector2(676, 380)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="TimerLabel" type="Label" parent="HUD"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 32
+text = "Time: 60s"

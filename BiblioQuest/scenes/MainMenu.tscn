@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=3 uid="uid://clllvu041lfsy"]
+
+[ext_resource type="Texture2D" uid="uid://cjs6adxjme67g" path="res://assets/MenuBackground.jpeg" id="1_iqr1c"]
+[ext_resource type="Script" path="res://scripts/MainMenu.gd" id="1_kuvo7"]
+[ext_resource type="Texture2D" uid="uid://ndh5a5akghve" path="res://assets/BiblioQuestLogo.png" id="2_pac6m"]
+[ext_resource type="Texture2D" uid="uid://bue6nm2risb4p" path="res://assets/PlayButton.png" id="3_o3e85"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kuvo7")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1228.0
+offset_bottom = 670.0
+texture = ExtResource("1_iqr1c")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="MenuUI" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -210.0
+offset_right = 500.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Logo" type="TextureRect" parent="MenuUI"]
+custom_minimum_size = Vector2(700, 350)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_pac6m")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="PlayButton" type="TextureButton" parent="MenuUI"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_vertical = 3
+texture_normal = ExtResource("3_o3e85")
+ignore_texture_size = true
+stretch_mode = 5
+
+[connection signal="pressed" from="MenuUI/PlayButton" to="." method="_on_play_button_pressed"]
