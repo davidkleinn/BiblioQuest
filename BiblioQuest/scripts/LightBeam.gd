@@ -1,6 +1,6 @@
 extends Node2D
 
-@export_range(0.0, 1.0) var opacity_loss_per_bounce: float = 0.1
+@export_range(0.0, 1.0) var opacity_loss_per_bounce: float = 0.001
 ## Arraste o nó "BeamEmitter" (filho do LightBeam) para cá no Inspector!
 @export var emitter: Node2D
 
@@ -37,17 +37,17 @@ func _ready() -> void:
 	if emitter == null:
 		push_error("⚠️  LightBeam: o campo 'Emitter' não foi preenchido no Inspector!")
 
-func _physics_process(_delta: float) -> void: # loop principal do feixe de luz que roda a cada frame de física
-	# ── Avisos de configuração (visíveis no Output do Godot) ───────────────
+func _physics_process(_delta: float) -> void:
 	if emitter == null:
 		push_warning("LightBeam: Emitter é nulo — o feixe não será desenhado.")
 		_clear_lines()
 		return
 
-	# Busca a porta de saída apenas uma vez (ou se ainda não achou)
+	# Busca a porta de saída apenas uma vez
 	if _exit_door == null:
 		_exit_door = get_tree().get_first_node_in_group("exit_door")
-
+		
+	# Chama a função que desenha a luz
 	_cast_beam()
 
 func _cast_beam() -> void:
@@ -61,16 +61,14 @@ func _cast_beam() -> void:
 	# Primeiro ponto: origem do feixe
 	points.append(to_local(pos))
 
-	for _i in max_bounces + 1: # é o loop que permite os múltiplos ricocheteios no mesmo frame
-		# Máscara: Paredes(1) + Estante(4) + Espelho(8) + PortaSaida(32) + Jogador(2)
-		# PortaEntrada (16) NÃO está na máscara → feixe nasce "dentro" dela
-		var query := PhysicsRayQueryParameters2D.create( # aqui é onde o raio é criado
-			pos + dir * 8.0,   # pequeno offset para não re-colidir no ponto atual
+	for _i in max_bounces + 1:
+		var query := PhysicsRayQueryParameters2D.create(
+			pos + dir * 8.0,   
 			pos + dir * max_length,
-			1 | 4 | 8 | 32 | 2 # a definição de quais camadas o feixe deve reconhecer
+			1 | 4 | 8 | 32 | 2 
 		)
 
-		var result := space.intersect_ray(query) # a chamada que faz a "pergunta" ao servido de física
+		var result := space.intersect_ray(query)
 
 		if not result:
 			# Feixe vai até o infinito sem bater em nada
@@ -81,24 +79,38 @@ func _cast_beam() -> void:
 		var collider          = result["collider"]
 		points.append(to_local(hit_pt))
 
+		# ========== BLOCO DO ESPELHO ==========
 		if collider is Node and (collider as Node).is_in_group("mirror"):
-			# A pesquisa que você fez: Usando bounce() com a normal da colisão
-			var normal: Vector2 = result["normal"]
-			dir = dir.bounce(normal).normalized() # função matemática para refletir o feixe no espelho 
+			var mirror := collider as Node2D
 			
-			# Trava Mágica: Arredonda o vetor para manter a luz sempre reta (cima/baixo/lados)
-			# Isso impede que o feixe saia torto caso o espelho gire fora de centro
-			dir = Vector2(round(dir.x), round(dir.y)) # aqui ele arredonda o vetor para manter o feixe em angulos retos
+			# TRUQUE VISUAL: Substituímos o ponto da borda pelo CENTRO do espelho!
+			# O to_local garante que a linha desenhe certo.
+			points[points.size() - 1] = to_local(mirror.global_position) 
 			
-			# Avança o ponto de colisão alguns pixels para o feixe não nascer dentro do próprio espelho
-			pos = hit_pt + dir * 10.0
+			# FÍSICA MATEMÁTICA: Cria uma normal base. 
+			var fake_normal := Vector2(-1, -1).normalized().rotated(mirror.global_rotation)
+			
+			# Vira a normal de frente para a luz
+			if dir.dot(fake_normal) > 0:
+				fake_normal = -fake_normal
+				
+			# Calcula a nova direção e trava reto
+			dir = dir.bounce(fake_normal).normalized()
+			dir = Vector2(round(dir.x), round(dir.y))
+			
+			# O próximo raio precisa sair do centro + uma distância segura
+			pos = mirror.global_position + dir * 15.0
+			
+		# ========== BLOCO DA PORTA DE SAÍDA ==========
 		elif collider is Node and (collider as Node).is_in_group("exit_door"):
 			hit_exit_door = true
-			break
+			break # Bateu na porta, a luz para aqui e não continua andando!
+			
+		# ========== BLOCO DAS PAREDES / ESTANTES ==========
 		else:
-			break
+			break # Se bateu em qualquer outra coisa sólida, interrompe o feixe!
 
-# ── Atualiza as Line2D (precisam de pelo menos 2 pontos) ───────────────
+	# ── Atualiza as Line2D (precisam de pelo menos 2 pontos) ───────────────
 	if points.size() < 2:
 		points.append(to_local(emitter.global_position + dir * 10.0))
 
@@ -106,17 +118,15 @@ func _cast_beam() -> void:
 	_line_glow.points = packed
 	_line_core.points = packed
 
-	# == NOVA LÓGICA DE PERDA DE LUZ POR REBATIDA ==
+	# == LÓGICA DE PERDA DE LUZ POR REBATIDA ==
 	var total_length := 0.0
 	var segment_lengths: Array[float] = []
 
-	# 1. Mede o tamanho de cada pedaço da linha
 	for i in range(points.size() - 1):
 		var dist := points[i].distance_to(points[i+1])
 		segment_lengths.append(dist)
 		total_length += dist
 
-	# 2. Constrói a coloração se o feixe existir
 	if total_length > 0.0:
 		var glow_grad := Gradient.new()
 		var core_grad := Gradient.new()
@@ -127,33 +137,25 @@ func _cast_beam() -> void:
 		
 		var current_dist := 0.0
 		
-		# Aplica a cor em cada segmento individualmente
 		for i in range(segment_lengths.size()):
-			# Calcula onde esse pedaço começa e termina (de 0.0 a 1.0)
 			var start_offset := clampf(current_dist / total_length, 0.0, 1.0)
 			var end_offset := clampf((current_dist + segment_lengths[i]) / total_length, 0.0, 1.0)
 			
-			# Lógica do Puzzle: Perde 10% (0.1) a cada rebatida (i)
-			# i=0 (100%), i=1 (90%), i=2 (80%). O max(0.0) impede que fique negativo
 			var opacity := maxf(0.0, 1.0 - (i * opacity_loss_per_bounce))
 			
-			# Adiciona um micro-deslocamento pra criar um "corte seco" de cor na quina do espelho
 			if i > 0:
 				start_offset = clampf(start_offset + 0.00001, 0.0, 1.0)
 				
-			# Define a cor de início do pedaço
 			offsets.append(start_offset)
-			glow_colors.append(Color(1.0, 0.85, 0.1, 0.45 * opacity))
+			glow_colors.append(Color(1.0, 0.85, 0.1, 1.0 * opacity))
 			core_colors.append(Color(1.0, 0.97, 0.3, 1.0 * opacity))
 			
-			# Define a cor de finalização do pedaço (garantindo que a linha seja sólida e não degradê)
 			offsets.append(end_offset)
-			glow_colors.append(Color(1.0, 0.85, 0.1, 0.45 * opacity))
+			glow_colors.append(Color(1.0, 0.85, 0.1, 0.7 * opacity))
 			core_colors.append(Color(1.0, 0.97, 0.3, 1.0 * opacity))
 			
 			current_dist += segment_lengths[i]
 		
-		# Aplica tudo na tela
 		glow_grad.offsets = offsets
 		glow_grad.colors = glow_colors
 		_line_glow.gradient = glow_grad
