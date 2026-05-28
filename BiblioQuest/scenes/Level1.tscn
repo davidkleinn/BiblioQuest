@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bqum2ge8wy5mi"]
+[gd_scene load_steps=16 format=3 uid="uid://bqum2ge8wy5mi"]
 
 [ext_resource type="Texture2D" uid="uid://rfg5qcvhyim5" path="res://assets/wood_tile-removebg-preview.png" id="1_4lxkl"]
 [ext_resource type="Script" path="res://scripts/Level1.gd" id="1_bcd0m"]
@@ -8,18 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://da2yoqesbl43v" path="res://scenes/Player.tscn" id="5_ow6w0"]
 [ext_resource type="PackedScene" uid="uid://dhq2tppcacmjq" path="res://scenes/LightBeam.tscn" id="6_0vjmu"]
 [ext_resource type="PackedScene" uid="uid://b6wmjc5wss54p" path="res://scenes/ClockCollectible.tscn" id="8_1bgwl"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_psjyf"]
-size = Vector2(1152, 20)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_rc42m"]
-size = Vector2(1152, 20)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_6nmi7"]
-size = Vector2(13, 552)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xbur0"]
-size = Vector2(17, 648)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vjwbb"]
 texture = ExtResource("1_4lxkl")
@@ -468,36 +456,27 @@ texture = ExtResource("1_4lxkl")
 [sub_resource type="TileSet" id="TileSet_264gt"]
 sources/0 = SubResource("TileSetAtlasSource_vjwbb")
 
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_n7x4r"]
+vertices = PackedVector2Array(16, 316, 17, 98, 125, 102, 385, 645, 16, 645, 124, 3, 1044, 3, 1044, 107, 1131, 106, 1132, 643)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4), PackedInt32Array(2, 5, 6, 7, 3), PackedInt32Array(7, 8, 9, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(1134, 103, 1136, 646, 10, 649, 15, 95, 122, 99, 121, -3, 1047, 1, 1047, 104)])
+source_geometry_group_name = &"navigation_polygon_source_group"
+agent_radius = 3.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xbur0"]
+size = Vector2(17, 648)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6nmi7"]
+size = Vector2(13, 552)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rc42m"]
+size = Vector2(1152, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_psjyf"]
+size = Vector2(1152, 20)
+
 [node name="Level1" type="Node2D"]
 script = ExtResource("1_bcd0m")
-
-[node name="WallTop" type="StaticBody2D" parent="."]
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallTop"]
-position = Vector2(576, -10)
-shape = SubResource("RectangleShape2D_psjyf")
-
-[node name="WallBottom" type="StaticBody2D" parent="."]
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallBottom"]
-position = Vector2(576, 658)
-shape = SubResource("RectangleShape2D_rc42m")
-
-[node name="WallLeft" type="StaticBody2D" parent="."]
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallLeft"]
-position = Vector2(6.5, 373)
-shape = SubResource("RectangleShape2D_6nmi7")
-
-[node name="WallRight" type="StaticBody2D" parent="."]
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WallRight"]
-position = Vector2(1144, 324)
-shape = SubResource("RectangleShape2D_xbur0")
 
 [node name="EntryDoor" parent="." instance=ExtResource("2_b0ohr")]
 position = Vector2(1100, 60)
@@ -591,3 +570,34 @@ offset_bottom = 23.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 32
 text = "Time: 60s"
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_n7x4r")
+
+[node name="WallRight" type="StaticBody2D" parent="NavigationRegion2D"]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NavigationRegion2D/WallRight"]
+position = Vector2(1144, 324)
+shape = SubResource("RectangleShape2D_xbur0")
+
+[node name="WallLeft" type="StaticBody2D" parent="NavigationRegion2D"]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NavigationRegion2D/WallLeft"]
+position = Vector2(6.5, 373)
+shape = SubResource("RectangleShape2D_6nmi7")
+
+[node name="WallBottom" type="StaticBody2D" parent="NavigationRegion2D"]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NavigationRegion2D/WallBottom"]
+position = Vector2(576, 658)
+shape = SubResource("RectangleShape2D_rc42m")
+
+[node name="WallTop" type="StaticBody2D" parent="NavigationRegion2D"]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NavigationRegion2D/WallTop"]
+position = Vector2(576, -10)
+shape = SubResource("RectangleShape2D_psjyf")

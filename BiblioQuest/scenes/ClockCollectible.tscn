@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://b6wmjc5wss54p"]
+[gd_scene load_steps=8 format=3 uid="uid://b6wmjc5wss54p"]
 
 [ext_resource type="Texture2D" uid="uid://da0to1sdj1way" path="res://assets/clock.png" id="1_ast3q"]
 [ext_resource type="Script" path="res://scripts/ClockCollectible.gd" id="1_x0ajt"]
@@ -6,8 +6,74 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_2v144"]
 radius = 11.0
 
-[node name="ClockCollectible" type="Area2D"]
-collision_mask = 3
+[sub_resource type="CircleShape2D" id="CircleShape2D_l5mol"]
+radius = 25.0
+
+[sub_resource type="Animation" id="Animation_hwq0f"]
+resource_name = "hop_walk"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, -1), Vector2(0, -8), Vector2(0, -1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.056, 0.056), Vector2(0.07, 0.06), Vector2(0.056, 0.056)]
+}
+
+[sub_resource type="Animation" id="Animation_0todo"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.056, 0.056)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l33it"]
+_data = {
+"RESET": SubResource("Animation_0todo"),
+"hop_walk": SubResource("Animation_hwq0f")
+}
+
+[node name="ClockCollectible" type="CharacterBody2D"]
+collision_layer = 3
+collision_mask = 2147516555
 script = ExtResource("1_x0ajt")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -17,3 +83,17 @@ texture = ExtResource("1_ast3q")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_2v144")
+
+[node name="CollectionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollectionArea"]
+shape = SubResource("CircleShape2D_l5mol")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_l33it")
+}
