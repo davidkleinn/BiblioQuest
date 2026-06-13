@@ -60,23 +60,23 @@ func _find_bookshelf_ahead() -> Node:
 	
 	# 1. Olhando para a DIREITA (empurrando da esquerda pra direita)
 	if facing.x > 0: 
-		origem.x += 12.0  # "empurra" a collision box da sprite pra direita
-		distancia_braco = 5.0 # Diminuí de 10 para 5, já que estava longe
+		origem.x += 24.0  # "empurra" a collision box da sprite pra direita
+		distancia_braco = 10.0 # Diminuí de 10 para 5, já que estava longe
 		
 	# 2. Olhando para a ESQUERDA (empurrando da direita pra esquerda)
 	elif facing.x < 0: 
 		# Sem deslocamento de origem, pois o sprite alinha melhor à esquerda
-		distancia_braco = 10.0 # a sprite já está um pouco alinhada à esquerda
+		distancia_braco = 20.0 # a sprite já está um pouco alinhada à esquerda
 		
 	# 3. Olhando para BAIXO (empurrando de cima pra baixo)
 	elif facing.y > 0: 
 		# Sem deslocamento de origem
-		distancia_braco = 30.0 # já está um pouco mais pra baixo
+		distancia_braco = 60.0 # já está um pouco mais pra baixo
 		
 	# 4. Olhando para CIMA (empurrando de baixo pra cima)
 	elif facing.y < 0: 
-		origem.y -= 10.0 # Desloca o collision box do sprite um pouco para cima
-		distancia_braco = 15.0 # compensa a collision box da sprite um pouco mais pra cima
+		origem.y -= 20.0 # Desloca o collision box do sprite um pouco para cima
+		distancia_braco = 30.0 # compensa a collision box da sprite um pouco mais pra cima
 		
 	var query := PhysicsRayQueryParameters2D.create(
 		origem,

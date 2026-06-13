@@ -1,7 +1,8 @@
 extends Node2D
 
 @onready var level_timer: Timer = $LevelTimer
-@onready var timer_label: Label = $HUD/TimerLabel
+@onready var timer_ui: Control = $HUD/TimerUI
+@onready var game_over_ui: Control = $HUD/GameOverUI
 
 func _ready() -> void:
 	# Coloca a fase no grupo para os relógios a encontrarem
@@ -12,15 +13,13 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	# Esse método roda a cada frame do jogo.
-	# Ele checa quanto tempo falta no Timer e atualiza o texto na tela
+	# Ele checa quanto tempo falta no Timer e atualiza o UI na tela
 	if level_timer and not level_timer.is_stopped():
-		# 'ceil' arredonda o tempo para cima (ex: 59.4 virá 60) para ficar mais bonito
-		var tempo_restante = ceil(level_timer.time_left)
-		timer_label.text = "Tempo: " + str(tempo_restante) + "s"
+		timer_ui.update_time(level_timer.time_left)
 
 func _on_level_timer_timeout() -> void:
-	# O tempo acabou! Fecha o jogo
-	get_tree().quit()
+	# Ao invés de fechar o jogo, ativa a nossa tela estilosa!
+	game_over_ui.trigger_game_over()
 
 func add_time(amount: float) -> void:
 	# Função que o relógio chama ao ser coletado
