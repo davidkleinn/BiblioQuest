@@ -1,0 +1,55 @@
+[gd_scene load_steps=5 format=3 uid="uid://cvh6p1bdki4yp"]
+
+[ext_resource type="Script" path="res://scenes/VictoryUI.gd" id="1_0j64x"]
+[ext_resource type="Texture2D" uid="uid://b1kcmpjhhe0x5" path="res://assets/Victory_Button.png" id="2_5vkcc"]
+[ext_resource type="Texture2D" uid="uid://bj4c7dcjx7jm3" path="res://assets/Menu_Button.png" id="3_u1pup"]
+[ext_resource type="Texture2D" uid="uid://bl0vnkgptdquu" path="res://assets/Exit_button.png" id="4_k5s6r"]
+
+[node name="VictoryUI" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0j64x")
+
+[node name="DarkBackground" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1200.0
+offset_bottom = 700.0
+color = Color(0, 0, 0, 0.588235)
+
+[node name="ButtonsContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 375.0
+offset_top = 75.0
+offset_right = 4375.0
+offset_bottom = 6605.0
+scale = Vector2(0.1, 0.1)
+theme_override_constants/separation = -800
+
+[node name="BtnVictory" type="TextureButton" parent="ButtonsContainer"]
+custom_minimum_size = Vector2(3000, 2500)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("2_5vkcc")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="BtnMenu" type="TextureButton" parent="ButtonsContainer"]
+custom_minimum_size = Vector2(2500, 2000)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("3_u1pup")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="BtnExit" type="TextureButton" parent="ButtonsContainer"]
+custom_minimum_size = Vector2(2100, 2000)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = ExtResource("4_k5s6r")
+ignore_texture_size = true
+stretch_mode = 5
