@@ -1,11 +1,19 @@
 extends StaticBody2D
 
+@export var is_movable: bool = true
+
 func _ready() -> void:
 	add_to_group("bookshelf")
+	if not is_movable:
+		# Deixa a estante fixa um pouco mais escura/cinza!
+		$Sprite2D.modulate = Color(0.6, 0.6, 0.6)
 
 ## Tenta mover a estante pela quantidade 'delta_pos'.
 ## Retorna TRUE se moveu, FALSE se estava bloqueada (parede ou outra estante).
 func push_by(delta_pos: Vector2) -> bool: # função principal de movimento
+	if not is_movable:
+		return false
+	
 	var new_pos := global_position + delta_pos
 
 	if _is_position_clear(new_pos): 
