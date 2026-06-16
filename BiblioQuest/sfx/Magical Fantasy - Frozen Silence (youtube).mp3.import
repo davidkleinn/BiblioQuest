@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://jvvx7p08ndoq"
+path="res://.godot/imported/Magical Fantasy - Frozen Silence (youtube).mp3-387fffa6b01bcf0c4f288f735866852e.mp3str"
+
+[deps]
+
+source_file="res://sfx/Magical Fantasy - Frozen Silence (youtube).mp3"
+dest_files=["res://.godot/imported/Magical Fantasy - Frozen Silence (youtube).mp3-387fffa6b01bcf0c4f288f735866852e.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

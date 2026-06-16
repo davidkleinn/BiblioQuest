@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://bbe7hidrtbi4c"]
+
+[ext_resource type="AudioStream" uid="uid://jvvx7p08ndoq" path="res://sfx/Magical Fantasy - Frozen Silence (youtube).mp3" id="1_g2h2v"]
+[ext_resource type="Script" path="res://scripts/background_music.gd" id="2_hhng2"]
+
+[node name="BackgroundMusic" type="AudioStreamPlayer"]
+process_mode = 3
+stream = ExtResource("1_g2h2v")
+script = ExtResource("2_hhng2")

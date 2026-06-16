@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.2", "Forward Plus")
 [autoload]
 
 SceneTransition="*res://scenes/scene_transition.tscn"
+BackgroundMusic="*res://scenes/background_music.tscn"
 
 [input]
 

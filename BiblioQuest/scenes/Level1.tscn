@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bqum2ge8wy5mi"]
+[gd_scene load_steps=24 format=3 uid="uid://bqum2ge8wy5mi"]
 
 [ext_resource type="Texture2D" uid="uid://rfg5qcvhyim5" path="res://assets/wood_tile-removebg-preview.png" id="1_4lxkl"]
 [ext_resource type="Script" path="res://scripts/Level1.gd" id="1_bcd0m"]
@@ -13,6 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://dkfcxn7feokgj" path="res://assets/Timer_Numbers.png" id="10_nl7bl"]
 [ext_resource type="PackedScene" uid="uid://bp8ltppnsxrhk" path="res://scenes/game_over_ui.tscn" id="13_1s25r"]
 [ext_resource type="PackedScene" uid="uid://cvh6p1bdki4yp" path="res://scenes/victory_ui.tscn" id="14_2bvge"]
+[ext_resource type="FontFile" uid="uid://citdi63v08p8r" path="res://assets/pastel crayon.ttf" id="14_v6j8m"]
+[ext_resource type="Script" path="res://scripts/TutorialText.gd" id="15_oytyi"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vjwbb"]
 texture = ExtResource("1_4lxkl")
@@ -16906,7 +16908,7 @@ position = Vector2(815, 580)
 is_movable = false
 
 [node name="Player" parent="." instance=ExtResource("5_ow6w0")]
-position = Vector2(907, 82)
+position = Vector2(883, 119)
 
 [node name="LightBeam" parent="." node_paths=PackedStringArray("emitter") instance=ExtResource("6_0vjmu")]
 self_modulate = Color(1, 1, 0, 1)
@@ -16989,6 +16991,31 @@ stretch_mode = 5
 
 [node name="VictoryUI" parent="HUD" instance=ExtResource("14_2bvge")]
 visible = false
+
+[node name="TutorialText" type="RichTextLabel" parent="HUD"]
+offset_left = 692.0
+offset_top = 28.0
+offset_right = 917.0
+offset_bottom = 68.0
+theme_override_fonts/normal_font = ExtResource("14_v6j8m")
+theme_override_font_sizes/normal_font_size = 18
+fit_content = true
+scroll_active = false
+script = ExtResource("15_oytyi")
+mensagens = Array[String](["use as setas para se mover; se algo der errado, aperte \"R\"...", "empurre as estantes para liberar o caminho...", "use \"E\" e \"Q\" para girar os espelhos...", "CUIDADO COM O TEMPO!!!"])
+posicoes = Array[Vector2]([Vector2(680, 30), Vector2(830, 270), Vector2(920, 520), Vector2(460, 130)])
+
+[node name="TutorialText2" type="RichTextLabel" parent="HUD"]
+offset_left = 460.0
+offset_top = 130.0
+offset_right = 685.0
+offset_bottom = 170.0
+theme_override_fonts/normal_font = ExtResource("14_v6j8m")
+theme_override_font_sizes/normal_font_size = 18
+fit_content = true
+scroll_active = false
+script = ExtResource("15_oytyi")
+posicoes = Array[Vector2]([Vector2(730, 70), Vector2(880, 280), Vector2(950, 550), Vector2(530, 160)])
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 visible = false
