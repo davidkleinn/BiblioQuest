@@ -17003,19 +17003,8 @@ fit_content = true
 scroll_active = false
 script = ExtResource("15_oytyi")
 mensagens = Array[String](["use as setas para se mover; se algo der errado, aperte \"R\"...", "empurre as estantes para liberar o caminho...", "use \"E\" e \"Q\" para girar os espelhos...", "CUIDADO COM O TEMPO!!!"])
-posicoes = Array[Vector2]([Vector2(680, 30), Vector2(830, 270), Vector2(920, 520), Vector2(460, 130)])
-
-[node name="TutorialText2" type="RichTextLabel" parent="HUD"]
-offset_left = 460.0
-offset_top = 130.0
-offset_right = 685.0
-offset_bottom = 170.0
-theme_override_fonts/normal_font = ExtResource("14_v6j8m")
-theme_override_font_sizes/normal_font_size = 18
-fit_content = true
-scroll_active = false
-script = ExtResource("15_oytyi")
-posicoes = Array[Vector2]([Vector2(730, 70), Vector2(880, 280), Vector2(950, 550), Vector2(530, 160)])
+posicoes = Array[Vector2]([Vector2(680, 30), Vector2(775, 270), Vector2(920, 520), Vector2(460, 130)])
+tempo_por_letra = 0.1
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 visible = false
