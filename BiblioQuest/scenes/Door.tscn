@@ -11,7 +11,7 @@ size = Vector2(95, 79)
 
 [node name="Door" type="StaticBody2D"]
 scale = Vector2(1.5, 1.5)
-collision_layer = 32
+collision_layer = 33
 script = ExtResource("1_fxum2")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
